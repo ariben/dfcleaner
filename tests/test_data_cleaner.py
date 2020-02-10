@@ -3,7 +3,7 @@
 import unittest
 import pandas as pd
 import numpy as np
-from cleaner.data_cleaner import sanitize_column_names, change_dtypes, remove_outliers, fill_nan, preprocess
+from dfcleaner.cleaner import sanitize_column_names, change_dtypes, remove_outliers, fill_nan, preprocess
 
 
 class TestDataCleaner(unittest.TestCase):
