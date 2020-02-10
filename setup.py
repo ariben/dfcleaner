@@ -1,3 +1,5 @@
+# python3 setup.py sdist bdist_wheel
+
 import pathlib
 from setuptools import setup
 
