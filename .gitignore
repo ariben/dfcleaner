@@ -1,2 +1,10 @@
+# visual studio code specific folder
 .vscode
+
+# compiled python files
 __pycache__
+
+# package specific folders
+dist
+build
+dfcleaner.egg-info
