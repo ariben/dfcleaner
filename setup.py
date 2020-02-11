@@ -17,8 +17,8 @@ setup(
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/zahash/dfcleaner",
-    author="Real Python",
-    author_email="office@realpython.com",
+    author="zahash",
+    author_email="zahash.z@gmail.com",
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
