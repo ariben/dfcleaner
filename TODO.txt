@@ -13,3 +13,6 @@ determine categorical and continuous columns by
 looking at column names with their count
 of unique values in descending order.
 
+add logging functionality to generate log files that
+stores the line changes and the function that changed them. 
+Just like git diff.
