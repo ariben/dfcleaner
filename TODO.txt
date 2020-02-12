@@ -1,0 +1,3 @@
+scale and normalize the data in dfcleaner
+
+maybe add train test split functionality
