@@ -111,3 +111,61 @@ def fill_nan(df, how):
                 raise ValueError("'how' parameter must be 'mean' or 'median'")
 
     return df
+
+
+def _can_convert_to_float(feat_col):
+    '''
+    determine if a feature column need to change their dtype from
+    string to float by picking 10 random samples from that
+    column and trying to parse it as float (float(value)).
+    If the majority of them get converted to float then the
+    dtype may be converted to float.
+    eg: a numeric column might have a '?' instead of np.nan
+
+    Args:
+        feat_col: pandas.Series object (dataframe column)
+    '''
+    num_samples = 10
+    required_sucess_ratio = 2/3
+    samples = feat_col.sample(num_samples)
+
+    successful_parse_count = 0
+    for sample in samples:
+        try:
+            float(sample)
+            successful_parse_count += 1
+        except ValueError:
+            pass
+
+    if successful_parse_count > num_samples*required_sucess_ratio:
+        return True
+    return False
+
+
+def suggest_column_dtypes(df):
+    # use the _can_convert_to_float() function
+    # if the column has nan then definitely int dtype
+    '''
+    this function focuses mainly on the string columns and
+    checks if they can be converted into float
+    Eg: a column may have numeric values but in string format
+        like, '12.0', '15.7', ....
+
+        or, a column may have special symbols or characters instead
+        of np.nan, like, '?', 'null', 'na' along with normal numbers 
+        like 12, 14.26, 85.15, .....
+
+        because of a single string value, the whole column might have
+        the 'object' or 'category' datatype
+
+    returns:
+        conversion dictionary that can be passed as an augument
+        to the preprocess() function
+    '''
+
+    suggested_convertion_dict = {}
+    for col in df.columns:
+        if df[col].dtype not in [int, float] and _can_convert_to_float(df[col]):
+            suggested_convertion_dict[col] = float
+
+    return suggested_convertion_dict
