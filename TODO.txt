@@ -16,3 +16,11 @@ of unique values in descending order.
 add logging functionality to generate log files that
 stores the line changes and the function that changed them. 
 Just like git diff.
+
+(multi-column method)
+to fill nan, predict from a linear regression model where
+y is the nan column (column to predict) and x is the column
+that is most correlated to y.
+
+(single-column method)
+to fill nan, sample from the column
