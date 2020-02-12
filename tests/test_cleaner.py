@@ -4,7 +4,7 @@
 import unittest
 import pandas as pd
 import numpy as np
-from dfcleaner.cleaner import sanitize_column_names, change_dtypes, remove_outliers, fill_nan, preprocess, suggest_column_dtypes
+from dfcleaner.cleaner import sanitize_column_names, change_dtypes, remove_outliers, fill_nan, preprocess, suggest_convertion_dict
 
 
 class TestDataCleaner(unittest.TestCase):
@@ -66,8 +66,8 @@ class TestDataCleaner(unittest.TestCase):
         # tearDownClass (to print the df and its info)
         self.__class__.final_df = new_df
 
-    def test_suggest_column_dtypes(self):
-        suggested_convertion_dict = suggest_column_dtypes(self.df2)
+    def test_suggest_convertion_dict(self):
+        suggested_convertion_dict = suggest_convertion_dict(self.df2)
         self.assertEqual(suggested_convertion_dict, {'b': float, 'c': float})
 
 # if __name__ == "__main__":

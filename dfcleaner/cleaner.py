@@ -142,7 +142,7 @@ def _can_convert_to_float(feat_col):
     return False
 
 
-def suggest_column_dtypes(df):
+def suggest_convertion_dict(df):
     # use the _can_convert_to_float() function
     # if the column has nan then definitely int dtype
     '''
