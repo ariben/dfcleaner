@@ -4,6 +4,8 @@
 
 This package contains helper methods to clean pandas dataframe quickly and therefore simplifying the data cleaning process
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Installation
 
 OS X & Linux:
