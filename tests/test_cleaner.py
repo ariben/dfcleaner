@@ -4,7 +4,7 @@
 import unittest
 import pandas as pd
 import numpy as np
-from dfcleaner.cleaner import sanitize_column_names, change_dtypes, remove_outliers, fill_nan, preprocess
+from dfcleaner.cleaner import sanitize_column_names, change_dtypes, remove_outliers, fill_nan, preprocess, suggest_column_dtypes
 
 
 class TestDataCleaner(unittest.TestCase):
@@ -12,6 +12,12 @@ class TestDataCleaner(unittest.TestCase):
     def setUp(self):
         self.df = pd.DataFrame({"A": [1, np.nan, 3, 4, 5, 50], "b": ["$ 50.0", "$2,000.00", -1.0, 0.0, np.nan, 6.0],
                                 "  485 5468a44 44   4 ?  $@e3   *   C cc    c D  ": ["z", np.nan, "asd", "?wa\n kk  a", "3456", "$%^&*"]})
+
+        self.df2 = pd.DataFrame({
+            'a': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+            'b': ['1', np.nan, '3', '4', '5', 6, '7', '8', 9, '10', '11'],
+            'c': ['?', '2', 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        })
 
     @classmethod
     def tearDownClass(cls):
@@ -60,6 +66,9 @@ class TestDataCleaner(unittest.TestCase):
         # tearDownClass (to print the df and its info)
         self.__class__.final_df = new_df
 
+    def test_suggest_column_dtypes(self):
+        suggested_convertion_dict = suggest_column_dtypes(self.df2)
+        self.assertEqual(suggested_convertion_dict, {'b': float, 'c': float})
 
 # if __name__ == "__main__":
 #     unittest.main()
