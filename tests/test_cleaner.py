@@ -1,4 +1,5 @@
-#Version: 1
+# run the below command from the root directory of project
+# python3 -m unittest tests.test_cleaner
 
 import unittest
 import pandas as pd
@@ -60,5 +61,5 @@ class TestDataCleaner(unittest.TestCase):
         self.__class__.final_df = new_df
 
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()
