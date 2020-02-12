@@ -43,6 +43,9 @@ pip install -r requirements.txt
 
 ## Release History
 
+- 0.1.0
+  - add MIT license badge in readme
+  - add function to suggest conversion dict
 - 0.0.1
   - Work in progress
 
