@@ -1,3 +1,12 @@
+convert camelCase to underscores
+
+provide default arguments in preprocess function
+
+drop column if too many missing values
+also, drop columns like 'id' or 'name' or anything similar
+
+One-hot encode categorical columns
+
 scale and normalize the data in dfcleaner
 
 maybe add train test split functionality
