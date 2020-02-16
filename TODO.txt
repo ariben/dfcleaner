@@ -1,3 +1,10 @@
+change_dtypes from float to int doesn't work
+
+convert dtype of all the non continuous (categorical with numbers or strings)
+columns to 'category'
+
+remove all the rows which have null in target column
+
 convert camelCase to underscores
 
 provide default arguments in preprocess function
