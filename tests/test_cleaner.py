@@ -11,7 +11,7 @@ class TestDataCleaner(unittest.TestCase):
 
     def setUp(self):
         self.df = pd.DataFrame({"A": [1, np.nan, 3, 4, 5, 50], "b": ["$ 50.0", "$2,000.00", -1.0, 0.0, np.nan, 6.0],
-                                "  485 5468a44 44   4 ?  $@e3   *   C cc    c D  ": ["z", np.nan, "asd", "?wa\n kk  a", "3456", "$%^&*"]})
+                                "  485_5468a44  _44   4 ?  $@e3   *   C cc    c D  ": ["z", np.nan, "asd", "?wa\n kk  a", "3456", "$%^&*"]})
 
         self.df2 = pd.DataFrame({
             'a': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],

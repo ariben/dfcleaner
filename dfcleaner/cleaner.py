@@ -32,12 +32,14 @@ def sanitize_column_names(df):
     new_cols = []
     for col in df.columns:
         # only keep alphanumeric and space
-        col = re.sub(r"[^A-Za-z0-9 ]", "", col)
+        col = re.sub(r"[^A-Za-z0-9 _]", "", col)
         # remove multiple consecutive spaces
         col = re.sub(r" +", " ", col)
         # strip leading and trailing white spaces, lowercase
         # and replace space with underscore
         col = col.strip().lower().replace(" ", "_")
+        # remove multiple consecutive underscores
+        col = re.sub(r"_+", "_", col)
         new_cols.append(col)
 
     df.columns = new_cols
