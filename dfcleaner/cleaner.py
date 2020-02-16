@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 
-def preprocess(df, column_dtype_conversion_dictionary, std_coeff, fill_na_method):
+def preprocess(df, column_dtype_conversion_dictionary={}, std_coeff=1.5, fill_na_method='median'):
     '''
     Args:
         column_dtype_conversion_dictionary: dictionary having keys as the 
