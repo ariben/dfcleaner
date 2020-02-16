@@ -1,5 +1,3 @@
-remove all rows where the target column is null
-
 removing outliers doesn't support imbalanced data.
 Therefore while removing outliers only consider feat
 
@@ -7,12 +5,6 @@ change_dtypes from float to int doesn't work
 
 convert dtype of all the non continuous (categorical with numbers or strings)
 columns to 'category'
-
-remove all the rows which have null in target column
-
-convert camelCase to underscores
-
-provide default arguments in preprocess function
 
 drop column if too many missing values
 also, drop columns like 'id' or 'name' or anything similar
