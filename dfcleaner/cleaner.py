@@ -35,7 +35,7 @@ def sanitize_column_names(df):
     '''
     new_cols = []
     for col in df.columns:
-        # only keep alphanumeric and space
+        # only keep alphanumeric, space and underscore
         col = re.sub(r"[^A-Za-z0-9 _]", "", col)
         # remove multiple consecutive spaces
         col = re.sub(r" +", " ", col)
