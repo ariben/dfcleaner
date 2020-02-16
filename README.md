@@ -43,6 +43,8 @@ pip install -r requirements.txt
 
 ## Release History
 
+- 0.1.1
+  - sanitize_column_names now keeps any already present underscores
 - 0.1.0
   - add MIT license badge in readme
   - add function to suggest conversion dict
