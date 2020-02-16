@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 
-def preprocess(df, column_dtype_conversion_dictionary={}, std_coeff=1.5, fill_na_method='median'):
+def preprocess(df, column_dtype_conversion_dictionary={}, std_coeff=1.5, fill_na_method='median', label_col=None):
     '''
     Args:
         column_dtype_conversion_dictionary: dictionary having keys as the 
@@ -17,6 +17,10 @@ def preprocess(df, column_dtype_conversion_dictionary={}, std_coeff=1.5, fill_na
     # df = sanitize_column_names(df)
     df = change_dtypes(df, column_dtype_conversion_dictionary)
     df = df.drop_duplicates()
+
+    if label_col is not None:
+        df = df.dropna(subset=[label_col])
+
     df = remove_outliers(df, std_coeff)
     df = fill_nan(df, fill_na_method)
 
