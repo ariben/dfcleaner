@@ -37,13 +37,18 @@ def sanitize_column_names(df):
     for col in df.columns:
         # only keep alphanumeric, space and underscore
         col = re.sub(r"[^A-Za-z0-9 _]", "", col)
+
         # remove multiple consecutive spaces
         col = re.sub(r" +", " ", col)
+
         # strip leading and trailing white spaces, lowercase
         # and replace space with underscore
         col = col.strip().replace(" ", "_")
+
         # convert CamelCase to snake_case
-        col = re.sub(r'(?<!^)(?=[A-Z])', '_', col)
+        col = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', col)
+        col = re.sub('([a-z0-9])([A-Z])', r'\1_\2', col)
+
         # remove multiple consecutive underscores
         col = re.sub(r"_+", "_", col)
 
