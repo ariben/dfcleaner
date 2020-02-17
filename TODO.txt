@@ -8,17 +8,6 @@ scale and normalize the data in dfcleaner
 
 maybe add train test split functionality
 
-determine which columns need to change their dtype from 
-string to float by picking 10 random samples from that
-column and trying to parse it as float (float(value)).
-If the majority of them get converted to float then the 
-dtype may be converted to float.
-eg: a numeric column might have a '?' instead of np.nan
-
-determine categorical and continuous columns by
-looking at column names with their count
-of unique values in descending order.
-
 add logging functionality to generate log files that
 stores the line changes and the function that changed them. 
 Just like git diff.
