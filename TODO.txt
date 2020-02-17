@@ -1,7 +1,6 @@
 change_dtypes from float to int doesn't work
 
 drop column if too many missing values
-also, drop columns like 'id' or 'name' or anything similar
 
 One-hot encode categorical columns
 

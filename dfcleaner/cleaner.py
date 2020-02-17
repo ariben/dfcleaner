@@ -205,3 +205,24 @@ def _can_convert_to_category(feat_col, threshold=0.01):
         return True
 
     return False
+
+
+def suggest_col_drop(cols):
+    '''
+    if there are any columns like names, first_names, ID
+    then they are suggested to be dropped
+
+    Args:
+        cols: a list of column names
+
+    returns:
+        a list of columns to drop
+    '''
+    cols_to_drop = []
+    for col in cols:
+        if re.search(r'name\b', col.lower()):
+            cols_to_drop.append(col)
+        if re.search(r'id\b', col.lower()):
+            cols_to_drop.append(col)
+
+    return cols_to_drop
