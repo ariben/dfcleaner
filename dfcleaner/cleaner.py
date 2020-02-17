@@ -179,7 +179,29 @@ def suggest_convertion_dict(df):
 
     suggested_convertion_dict = {}
     for col in df.columns:
-        if df[col].dtype not in [int, float] and _can_convert_to_float(df[col]):
-            suggested_convertion_dict[col] = float
+        if df[col].dtype in [int, float]:
+            if _can_convert_to_category(df[col]):
+                suggested_convertion_dict[col] = 'category'
+
+        else:
+            if _can_convert_to_float(df[col]):
+                suggested_convertion_dict[col] = float
 
     return suggested_convertion_dict
+
+
+def _can_convert_to_category(feat_col, threshold=0.01):
+    '''
+    determine if a numeric column is actually categorical by
+    looking at what percentage of unique values are there when
+    compared to the total number values
+    Eg: 'has_credit_card' might have values 1 or 0
+        which is technically numeric(int) but actually categorical
+    '''
+    uniq_len = len(feat_col.unique())
+    total_len = len(feat_col)
+
+    if uniq_len / total_len < threshold:
+        return True
+
+    return False

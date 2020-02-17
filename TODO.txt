@@ -1,8 +1,5 @@
 change_dtypes from float to int doesn't work
 
-convert dtype of all the non continuous (categorical with numbers or strings)
-columns to 'category'
-
 drop column if too many missing values
 also, drop columns like 'id' or 'name' or anything similar
 
