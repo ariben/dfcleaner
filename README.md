@@ -43,6 +43,10 @@ pip install -r requirements.txt
 
 ## Release History
 
+- 0.2.1
+  - fixed multiple underscore issue and add support for
+    mulitple consecutive capital letters (DNSServer -> dns_server)
+    in CamelCase to snake_case conversion
 - 0.2.0
   - add default parameters to preprocess function
   - add parameter 'label_col' in preprocess() to remove
@@ -58,9 +62,6 @@ pip install -r requirements.txt
     based on the column name; like ID, first_name, surname, ...
 - 0.1.1
   - sanitize_column_names now keeps any already present underscores
-- 0.1.0
-  - add MIT license badge in readme
-  - add function to suggest conversion dict
 
 ## Meta
 
