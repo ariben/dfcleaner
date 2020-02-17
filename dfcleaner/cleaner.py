@@ -41,11 +41,14 @@ def sanitize_column_names(df):
         col = re.sub(r" +", " ", col)
         # strip leading and trailing white spaces, lowercase
         # and replace space with underscore
-        col = col.strip().lower().replace(" ", "_")
+        col = col.strip().replace(" ", "_")
+        # convert CamelCase to snake_case
+        col = re.sub(r'(?<!^)(?=[A-Z])', '_', col)
         # remove multiple consecutive underscores
         col = re.sub(r"_+", "_", col)
-        # convert CamelCase to snake_case
-        col = re.sub(r'(?<!^)(?=[A-Z])', '_', col).lower()
+
+        # lower case
+        col = col.lower()
         new_cols.append(col)
 
     df.columns = new_cols
