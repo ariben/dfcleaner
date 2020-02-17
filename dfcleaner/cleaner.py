@@ -21,7 +21,7 @@ def preprocess(df, column_dtype_conversion_dictionary={}, std_coeff=1.5, fill_na
     if label_col is not None:
         df = df.dropna(subset=[label_col])
 
-    df = remove_outliers(df, std_coeff)
+    df = remove_outliers(df, std_coeff, label_col=label_col)
     df = fill_nan(df, fill_na_method)
 
     return df
@@ -99,8 +99,14 @@ def change_dtypes(df, conversion_dictionary):
     return df
 
 
-def remove_outliers(df, std_coeff):
-    for col_name in df.columns:
+def remove_outliers(df, std_coeff, label_col=None):
+    cols = list(df.columns)
+
+    # consider only feat cols while removing outliers
+    if label_col is not None:
+        cols.remove(label_col)
+
+    for col_name in cols:
         if df[col_name].dtype in [int, float]:
             df[col_name] = df[col_name].mask(df[col_name].sub(
                 df[col_name].mean()).div(df[col_name].std()).abs().gt(std_coeff))
