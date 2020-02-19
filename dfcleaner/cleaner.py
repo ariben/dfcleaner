@@ -27,37 +27,45 @@ def preprocess(df, column_dtype_conversion_dictionary={}, std_coeff=1.5, fill_na
     return df
 
 
-def sanitize_column_names(df):
+def sanitize(arr):
     '''
-    changes the column names to lowercase, strips any leading and trailing white space,
-    replaces space between words to underscores and only keeps alphanumeric (and underscore) 
-    characters
+    for each string in the array, this function will
+        - keeps only alphanumeric, space and underscore characters
+        - replaces multiple consecutive spaces with a single space
+        - strips leading and trailing white spaces
+        - replace spaces with underscores
+        - convert CamelCase to snake_case
+        - remove multiple consecutive underscores again
+        - convert the whole string into lowercase
+
+    Returns: array of strings where the strings are 'sanitized'
+    Args:
+        arr: array of strings
     '''
-    new_cols = []
-    for col in df.columns:
+    new_arr = []
+    for string in arr:
         # only keep alphanumeric, space and underscore
-        col = re.sub(r"[^A-Za-z0-9 _]", "", col)
+        string = re.sub(r"[^A-Za-z0-9 _]", "", string)
 
         # remove multiple consecutive spaces
-        col = re.sub(r" +", " ", col)
+        string = re.sub(r" +", " ", string)
 
         # strip leading and trailing white spaces, lowercase
         # and replace space with underscore
-        col = col.strip().replace(" ", "_")
+        string = string.strip().replace(" ", "_")
 
         # convert CamelCase to snake_case
-        col = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', col)
-        col = re.sub('([a-z0-9])([A-Z])', r'\1_\2', col)
+        string = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', string)
+        string = re.sub('([a-z0-9])([A-Z])', r'\1_\2', string)
 
         # remove multiple consecutive underscores
-        col = re.sub(r"_+", "_", col)
+        string = re.sub(r"_+", "_", string)
 
         # lower case
-        col = col.lower()
-        new_cols.append(col)
+        string = string.lower()
+        new_arr.append(string)
 
-    df.columns = new_cols
-    return df
+    return new_arr
 
 
 def _filter_characters(dtype, element):

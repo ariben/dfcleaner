@@ -4,7 +4,7 @@
 import unittest
 import pandas as pd
 import numpy as np
-from dfcleaner.cleaner import sanitize_column_names, change_dtypes, remove_outliers, fill_nan, preprocess, suggest_convertion_dict
+from dfcleaner.cleaner import sanitize, change_dtypes, remove_outliers, fill_nan, preprocess, suggest_convertion_dict
 
 
 class TestDataCleaner(unittest.TestCase):
@@ -20,50 +20,47 @@ class TestDataCleaner(unittest.TestCase):
             'c': ['?', '2', 3, 4, 5, 6, 7, 8, 9, 10, 11],
         })
 
-        self.df_sanitize_column_names = pd.DataFrame(
-            {
-                "having_IP_Address": [1],
-                "URL_Length": [1],
-                "Shortining_Service": [1],
-                "having_At_Symbol": [1],
-                "double_slash_redirecting": [1],
-                "Prefix_Suffix": [1],
-                "having_Sub_Domain": [1],
-                "domain_registeration_length": [1],
-                "Favicon": [1],
-                "port": [1],
-                "HTTPS_token": [1],
-                "Request_URL": [1],
-                "URL_of_Anchor": [1],
-                "Links_in_tags": [1],
-                "SFH": [1],
-                "Submitting_to_email": [1],
-                "Abnormal_URL": [1],
-                "Redirect": [1],
-                "on_mouseover": [1],
-                "RightClick": [1],
-                "popUpWidnow": [1],
-                "Iframe": [1],
-                "age_of_domain": [1],
-                "DNSRecord": [1],
-                "web_traffic": [1],
-                "Page_Rank": [1],
-                "Google_Index": [1],
-                "Links_pointing_to_page": [1],
-                "Statistical_report": [1],
-                "Result": [1],
-                "  485_5468a44  _44   4 ?  $@e3   *   C cc    c D  ": [1],
-            }
-        )
+        self.sanitize_arr = [
+            "having_IP_Address",
+            "URL_Length",
+            "Shortining_Service",
+            "having_At_Symbol",
+            "double_slash_redirecting",
+            "Prefix_Suffix",
+            "having_Sub_Domain",
+            "domain_registeration_length",
+            "Favicon",
+            "port",
+            "HTTPS_token",
+            "Request_URL",
+            "URL_of_Anchor",
+            "Links_in_tags",
+            "SFH",
+            "Submitting_to_email",
+            "Abnormal_URL",
+            "Redirect",
+            "on_mouseover",
+            "RightClick",
+            "popUpWidnow",
+            "Iframe",
+            "age_of_domain",
+            "DNSRecord",
+            "web_traffic",
+            "Page_Rank",
+            "Google_Index",
+            "Links_pointing_to_page",
+            "Statistical_report",
+            "Result",
+            "  485_5468a44  _44   4 ?  $@e3   *   C cc    c D  ",
+        ]
 
     @classmethod
     def tearDownClass(cls):
         print(cls.final_df.info())
         print(cls.final_df)
 
-    def test_sanitize_column_names(self):
-        new_df = sanitize_column_names(self.df_sanitize_column_names)
-        new_cols = list(new_df.columns)
+    def test_sanitize(self):
+        new_cols = sanitize(self.sanitize_arr)
 
         self.assertListEqual(
             new_cols,
@@ -129,7 +126,8 @@ class TestDataCleaner(unittest.TestCase):
             fill_nan(self.df, 5.0)
 
     def test_preprocess(self):
-        new_df = sanitize_column_names(self.df)
+        new_df = self.df.copy()
+        new_df.columns = sanitize(self.df.columns)
         new_df = preprocess(new_df, {"a": int, "b": float, "485_5468a44_44_4_e3_c_cc_c_d": 'category'},
                             1.5, 'median')
 
