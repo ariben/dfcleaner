@@ -260,7 +260,7 @@ def _can_convert_to_float(feat_col):
     return False
 
 
-def suggest_convertion_dict(df):
+def suggest_conversion_dict(df):
     # use the _can_convert_to_float() function
     # if the column has nan then definitely int dtype
     '''
@@ -288,17 +288,17 @@ def suggest_convertion_dict(df):
         df: pandas.DataFrame
     '''
 
-    suggested_convertion_dict = {}
+    suggested_conversion_dict = {}
     for col in df.columns:
         if df[col].dtype in [int, float]:
             if _can_convert_to_category(df[col]):
-                suggested_convertion_dict[col] = 'category'
+                suggested_conversion_dict[col] = 'category'
 
         else:
             if _can_convert_to_float(df[col]):
-                suggested_convertion_dict[col] = float
+                suggested_conversion_dict[col] = float
 
-    return suggested_convertion_dict
+    return suggested_conversion_dict
 
 
 def _can_convert_to_category(feat_col, threshold=0.01):

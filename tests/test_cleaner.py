@@ -4,7 +4,7 @@
 import unittest
 import pandas as pd
 import numpy as np
-from dfcleaner.cleaner import sanitize, change_dtypes, remove_outliers, fill_nan, preprocess, suggest_convertion_dict, spot_irrelevant_columns
+from dfcleaner.cleaner import sanitize, change_dtypes, remove_outliers, fill_nan, preprocess, suggest_conversion_dict, spot_irrelevant_columns
 
 
 class TestDataCleaner(unittest.TestCase):
@@ -89,7 +89,7 @@ class TestDataCleaner(unittest.TestCase):
             'b': [np.nan, 2, 3, 4, np.nan, 6],
         })
 
-        self.df_suggest_convertion = pd.DataFrame({
+        self.df_suggest_conversion = pd.DataFrame({
             'a': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
             'b': ['1', np.nan, '3', '4', '5', 6, '7', '8', 9, '10', '11'],
             'c': ['?', '2', 3, 4, 5, 6, 7, 8, 9, 10, 11],
@@ -190,10 +190,10 @@ class TestDataCleaner(unittest.TestCase):
             fill_nan(self.df_fill_nan, 'asdf')
             fill_nan(self.df_fill_nan, 5.0)
 
-    def test_suggest_convertion_dict(self):
-        suggested_convertion_dict = suggest_convertion_dict(
-            self.df_suggest_convertion)
-        self.assertEqual(suggested_convertion_dict, {'b': float, 'c': float})
+    def test_suggest_conversion_dict(self):
+        suggested_conversion_dict = suggest_conversion_dict(
+            self.df_suggest_conversion)
+        self.assertEqual(suggested_conversion_dict, {'b': float, 'c': float})
 
     def test_suggest_col_drop(self):
         cols_to_drop = spot_irrelevant_columns(self.sample_col_names)
