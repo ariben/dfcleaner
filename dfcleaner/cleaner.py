@@ -226,7 +226,7 @@ def _can_convert_to_category(feat_col, threshold=0.01):
     return False
 
 
-def suggest_col_drop(cols):
+def spot_irrelevant_columns(cols):
     '''
     if there are any columns like names, first_names, ID
     then they are suggested to be dropped

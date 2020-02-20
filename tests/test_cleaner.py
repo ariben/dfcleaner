@@ -4,7 +4,7 @@
 import unittest
 import pandas as pd
 import numpy as np
-from dfcleaner.cleaner import sanitize, change_dtypes, remove_outliers, fill_nan, preprocess, suggest_convertion_dict, suggest_col_drop
+from dfcleaner.cleaner import sanitize, change_dtypes, remove_outliers, fill_nan, preprocess, suggest_convertion_dict, spot_irrelevant_columns
 
 
 class TestDataCleaner(unittest.TestCase):
@@ -196,7 +196,7 @@ class TestDataCleaner(unittest.TestCase):
         self.assertEqual(suggested_convertion_dict, {'b': float, 'c': float})
 
     def test_suggest_col_drop(self):
-        cols_to_drop = suggest_col_drop(self.sample_col_names)
+        cols_to_drop = spot_irrelevant_columns(self.sample_col_names)
 
         self.assertListEqual(
             cols_to_drop,
