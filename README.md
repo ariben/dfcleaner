@@ -41,28 +41,6 @@ Windows:
 pip install -r requirements.txt
 ```
 
-## Release History
-
-- 0.2.1
-  - fixed multiple underscore issue and add support for
-    mulitple consecutive capital letters (DNSServer -> dns_server)
-    in CamelCase to snake_case conversion
-- 0.2.0
-  - add default parameters to preprocess function
-  - add parameter 'label_col' in preprocess() to remove
-    rows where the label_col is null
-  - sanitize_column_names() now converts CamelCase to snake_case
-  - add parameter 'label_col' in remove_outliers() so that
-    the label col will not be considered as a column to remove
-    outliers from
-  - suggest_conversion_dict() now suggests 'category' dtype to
-    numeric columns that are actually categorical; like 'has_credit_card'
-    that has 1 or 0 as values
-  - add suggest_col_drop() to suggest which columns to drop (irrelevant columns)
-    based on the column name; like ID, first_name, surname, ...
-- 0.1.1
-  - sanitize_column_names now keeps any already present underscores
-
 ## Meta
 
 M. Zahash – zahash.z@gmail.com
