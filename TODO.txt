@@ -1,6 +1,6 @@
-rewrite test cases with a seprate dataframe for each test
+update changelog
 
-change_dtypes from float to int doesn't work
+rearrange the arguments in all functions
 
 drop column if too many missing values
 
