@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- changed the function sanitize_column_names() to sanitize() which now takes just a array of strings and 'sanitizes' them; Introduced Breaking Changes
+- rewrote tests in a cleaner way
+- renamed the function suggest_col_drop() to spot_irrelevant_columns()
+
+### Fixed
+
+- bug fixed in the change_dtypes() function; bug fixes in the suggest_col_drop() function => identifying the 'id' columns like customer id, id, ... but NOT columns like rfid
+
 ## 0.2.1
 
 ### Fixed
