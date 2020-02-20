@@ -46,7 +46,7 @@ def preprocess(df, column_dtype_conversion_dictionary={}, std_coeff=1.5, fill_na
         df = df.dropna(subset=[label_col])
 
     df = remove_outliers(df, std_coeff, label_col=label_col)
-    df = fill_nan(df, fill_na_method)
+    df = fill_nan(df, fill_na_method, label_col=label_col)
 
     return df
 
@@ -204,7 +204,7 @@ def remove_outliers(df, std_coeff, label_col=None):
     return df
 
 
-def fill_nan(df, how):
+def fill_nan(df, how, label_col=None):
     '''
     This function will take a pandas.DataFrame and fills all the 
     null values in all columns according to the method provided.
@@ -217,6 +217,7 @@ def fill_nan(df, how):
     Args:
         df: pandas.DataFrame
         how: 'median'(recommended) or 'mean'
+        label_col: the target(label) column name (if any) as a string
     '''
     for col_name in df.columns:
         if df[col_name].dtype in [int, float]:
