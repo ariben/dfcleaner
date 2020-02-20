@@ -4,21 +4,13 @@
 import unittest
 import pandas as pd
 import numpy as np
-from dfcleaner.cleaner import sanitize, change_dtypes, remove_outliers, fill_nan, preprocess, suggest_convertion_dict
+from dfcleaner.cleaner import sanitize, change_dtypes, remove_outliers, fill_nan, preprocess, suggest_convertion_dict, suggest_col_drop
 
 
 class TestDataCleaner(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = None
-        self.df = pd.DataFrame({"A": [1, np.nan, 3, 4, 5, 50], "b": ["$ 50.0", "$2,000.00", -1.0, 0.0, np.nan, 6.0],
-                                "  485_5468a44  _44   4 ?  $@e3   *   C cc    c D  ": ["z", np.nan, "asd", "?wa\n kk  a", "3456", "$%^&*"]})
-
-        self.df2 = pd.DataFrame({
-            'a': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-            'b': ['1', np.nan, '3', '4', '5', 6, '7', '8', 9, '10', '11'],
-            'c': ['?', '2', 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        })
 
         self.sanitize_arr = [
             "having_IP_Address",
@@ -54,10 +46,54 @@ class TestDataCleaner(unittest.TestCase):
             "  485_5468a44  _44   4 ?  $@e3   *   C cc    c D  ",
         ]
 
-    @classmethod
-    def tearDownClass(cls):
-        print(cls.final_df.info())
-        print(cls.final_df)
+        self.sample_col_names = [
+            'first name',
+            'First_Name',
+            'first_name',
+            'firstname',
+            'surname',
+            'Surname',
+            'SurName',
+            'namek',
+            'rfid',
+            'idea',
+            'id',
+            'Id',
+            'iD',
+            'ID',
+            'customer_id',
+            'customer id',
+        ]
+
+        self.df_change_dtypes = pd.DataFrame({
+            'a': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            'b': [1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            'c': [1, '2', 3, 4, 5, 6, '7', 8, 9, 10, '11', 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            'd': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'],
+            'e': [1, 2, 3, 4, '?', '?', 7, 8, 9, 10, 11, '?', 13, 14, 15, 16, 17, '?', 19, 20],
+            'f': ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't'],
+            'g': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+        })
+
+        self.df_outlier_regression = pd.DataFrame({
+            'a': [1, 2, 9000, 4, 5, 6],
+            'label': [42, 58, 62, 47, 13, 75],
+        })
+        self.df_outlier_classification = pd.DataFrame({
+            'a': [5, 10, 7, 19, -99999, 17],
+            'label': [1, 0, 0, 0, 1, 0],
+        })
+
+        self.df_fill_nan = pd.DataFrame({
+            'a': [1, 2, 3, 4, 5, 6],
+            'b': [np.nan, 2, 3, 4, np.nan, 6],
+        })
+
+        self.df_suggest_convertion = pd.DataFrame({
+            'a': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+            'b': ['1', np.nan, '3', '4', '5', 6, '7', '8', 9, '10', '11'],
+            'c': ['?', '2', 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        })
 
     def test_sanitize(self):
         new_cols = sanitize(self.sanitize_arr)
@@ -100,44 +136,86 @@ class TestDataCleaner(unittest.TestCase):
         )
 
     def test_change_dtypes(self):
-        new_df = change_dtypes(self.df, {"b": float})
+        self.df_change_dtypes = change_dtypes(
+            self.df_change_dtypes,
+            {
+                'a': 'float',
+                'b': int,
+                'c': 'int',
+                'd': int,
+                'e': float,
+                'g': 'category',
+            }
+        )
 
-        self.assertEqual(new_df["b"].dtype, float)
+        self.assertEqual(self.df_change_dtypes['a'].dtype, float)
+        self.assertEqual(self.df_change_dtypes['b'].dtype, 'int')
+        self.assertEqual(self.df_change_dtypes['c'].dtype, 'int')
+        self.assertEqual(self.df_change_dtypes['d'].dtype, int)
+        self.assertEqual(self.df_change_dtypes['e'].dtype, float)
+        self.assertEqual(self.df_change_dtypes['g'].dtype, 'category')
 
-    # def test_remove_outliers(self):
-    #     new_df = remove_outliers(self.df, 1.5)
+    def test_remove_outliers(self):
+        self.df_outlier_regression = remove_outliers(self.df_outlier_regression,
+                                                     label_col='label',
+                                                     std_coeff=1.5)
+        self.df_outlier_classification = remove_outliers(self.df_outlier_classification,
+                                                         label_col='label',
+                                                         std_coeff=1.5)
+
+        np.testing.assert_array_equal(list(self.df_outlier_regression['a']),
+                                      [1.0, 2.0, np.nan, 4.0, 5.0, 6.0])
+        np.testing.assert_array_equal(list(self.df_outlier_classification['a']),
+                                      [5, 10, 7, 19, np.nan, 17])
 
     def test_fill_nan(self):
-        new_df = fill_nan(self.df, 'mean')
-        self.assertEqual(list(new_df["A"]), [
-                         1.0, 12.6, 3.0, 4.0, 5.0, 50.0])
+        self.df_fill_nan = fill_nan(self.df_fill_nan, 'mean')
+        self.assertListEqual(list(self.df_fill_nan['a']),
+                             [1, 2, 3, 4, 5, 6])
+        self.assertListEqual(list(self.df_fill_nan['b']),
+                             [3.75, 2, 3, 4, 3.75, 6])
 
         # the above test fills the null values in numeric columns of df
         # with mean. Therefore, reset the df back to original
         # to test for filling null values with median
         self.setUp()
 
-        new_df = fill_nan(self.df, 'median')
-        self.assertEqual(list(new_df["A"]), [
-                         1.0, 4.0, 3.0, 4.0, 5.0, 50.0])
+        self.df_fill_nan = fill_nan(self.df_fill_nan, 'median')
+        self.assertListEqual(list(self.df_fill_nan['a']),
+                             [1, 2, 3, 4, 5, 6])
+        self.assertListEqual(list(self.df_fill_nan['b']),
+                             [3.5, 2, 3, 4, 3.5, 6])
 
         with self.assertRaises(ValueError):
-            fill_nan(self.df, 'asdf')
-            fill_nan(self.df, 5.0)
-
-    def test_preprocess(self):
-        new_df = self.df.copy()
-        new_df.columns = sanitize(self.df.columns)
-        new_df = preprocess(new_df, {"a": int, "b": float, "485_5468a44_44_4_e3_c_cc_c_d": 'category'},
-                            1.5, 'median')
-
-        # made it a class attribute inorder to use it in the
-        # tearDownClass (to print the df and its info)
-        self.__class__.final_df = new_df
+            fill_nan(self.df_fill_nan, 'asdf')
+            fill_nan(self.df_fill_nan, 5.0)
 
     def test_suggest_convertion_dict(self):
-        suggested_convertion_dict = suggest_convertion_dict(self.df2)
+        suggested_convertion_dict = suggest_convertion_dict(
+            self.df_suggest_convertion)
         self.assertEqual(suggested_convertion_dict, {'b': float, 'c': float})
 
-# if __name__ == "__main__":
-#     unittest.main()
+    def test_suggest_col_drop(self):
+        cols_to_drop = suggest_col_drop(self.sample_col_names)
+
+        self.assertListEqual(
+            cols_to_drop,
+            [
+                'first name',
+                'First_Name',
+                'first_name',
+                'firstname',
+                'surname',
+                'Surname',
+                'SurName',
+                'id',
+                'Id',
+                'iD',
+                'ID',
+                'customer_id',
+                'customer id',
+            ]
+        )
+
+        # if __name__ == "__main__":
+        #     unittest.main()
