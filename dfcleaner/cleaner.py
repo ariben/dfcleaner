@@ -173,7 +173,7 @@ def change_dtypes(df, conversion_dictionary):
     return df
 
 
-def remove_outliers(df, std_coeff, label_col=None):
+def remove_outliers(df, std_coeff=1.5, label_col=None):
     '''
     This function will take a dataframe and replaces all the outliers
     with np.nan.
