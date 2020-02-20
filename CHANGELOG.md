@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.1
+
+### Changed
+
+- some major doc string additions and modifications in all the functions; Make the doc string look good and informative
+- set default parameter of std_coeff to 1.5 in remove_outliers() function
+- changed the word 'convertion' to 'conversion'
+
+### Added
+
+- add parameter 'label_col' to fill_nan() function
+
 ## 1.0.0
 
 ### Changed
