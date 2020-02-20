@@ -106,11 +106,14 @@ def change_dtypes(df, conversion_dictionary):
     ''' first applies the functions then changes the dtypes '''
     for col_name, dtype in conversion_dictionary.items():
         if dtype in [int, float]:
-            df[col_name] = df[col_name].apply(
-                lambda x: _filter_characters(dtype, x))
+            if df[col_name].dtype not in [int, float]:
+                df[col_name] = df[col_name].apply(
+                    lambda x: _filter_characters(dtype, x))
+            else:
+                df[col_name] = df[col_name].astype(dtype)
 
         else:
-            df[col_name] = df[col_name].astype({col_name: dtype})
+            df[col_name] = df[col_name].astype(dtype)
 
     return df
 
@@ -238,7 +241,7 @@ def suggest_col_drop(cols):
     for col in cols:
         if re.search(r'name\b', col.lower()):
             cols_to_drop.append(col)
-        if re.search(r'id\b', col.lower()):
+        if re.search(r'(\b|[ _])id\b', col.lower()):
             cols_to_drop.append(col)
 
     return cols_to_drop
