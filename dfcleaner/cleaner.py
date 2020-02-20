@@ -5,7 +5,29 @@ import re
 
 def preprocess(df, column_dtype_conversion_dictionary={}, std_coeff=1.5, fill_na_method='median', label_col=None):
     '''
+    A convinient function that 
+        - changes the datatypes of columns according to the 
+            values given in the 'column_dtype_conversion_dictionary'
+            argument
+        - drops duplicate rows
+        - if there is a target(label) column then drops all rows where that
+            column value is null
+        - removes outliers according to the std coefficient given as a parameter
+            (doesn't consider the target(label) column to check for outliers)
+        - fills nan values according to the fill_na_method parameter
+
+    Note: This function performs all the above said actions in the 
+        same order as mentioned.
+
+    All the functions that are used here can also be used
+    independently.
+
+    Returns: 
+        A cleaned up dataframe
+
     Args:
+        df: pandas.DataFrame object
+
         column_dtype_conversion_dictionary: dictionary having keys as the 
             column name and value as the desired dtype
 
@@ -13,6 +35,8 @@ def preprocess(df, column_dtype_conversion_dictionary={}, std_coeff=1.5, fill_na
 
         fill_na_method: 'mean' or 'median'. nan values of each column will
             be replaced by that column's mean or median
+
+        label_col: the target(label) column name (if any) as a string
     '''
     # df = sanitize_column_names(df)
     df = change_dtypes(df, column_dtype_conversion_dictionary)
@@ -37,6 +61,9 @@ def sanitize(arr):
         - convert CamelCase to snake_case
         - remove multiple consecutive underscores again
         - convert the whole string into lowercase
+
+    Note: This function performs all the above said actions in the 
+        same order as mentioned
 
     Returns: array of strings where the strings are 'sanitized'
     Args:
@@ -103,7 +130,35 @@ def _filter_characters(dtype, element):
 
 
 def change_dtypes(df, conversion_dictionary):
-    ''' first applies the functions then changes the dtypes '''
+    '''
+    This function will take a pandas.DataFrame and a 
+    conversion dictionary as input and changes the datatypes 
+    of the columns according to the conversion dictionary.
+
+    Usage scenario 1:
+        If a column where the values are like '$25.99', '$ 7.2', '$29,347.32' ...
+        where you want to extract the float number and leave the string characters like '$', ',', ' ' ...
+        you can just include the column name as key and float as value in the conversion dictionary
+            Eg: {'col_name': float}
+
+    Usage scenario 2:
+        If a column where the values are actually float but because 
+        of a single string character somewhere, the whole dtype 
+        changes to Object
+            Eg: a column has these values 27.6, 48.125, 24, ?, 74.32
+
+        The ? is a string character in a numeric column trying to represent nan value
+        In this case, simply include the key value pairs in the conversion dict 
+        {'col_name': float}
+
+    Returns: pandas.DataFrame with the changed datatypes
+
+    Args:
+        df: pandas.DataFrame object
+        conversion_dict: dictionary with column names as keys and the 
+            dtypes as values
+            Eg: {'col_0': float, 'col_1': 'category', 'col_5': int}
+    '''
     for col_name, dtype in conversion_dictionary.items():
         if dtype in [int, float]:
             if df[col_name].dtype not in [int, float]:
@@ -119,6 +174,22 @@ def change_dtypes(df, conversion_dictionary):
 
 
 def remove_outliers(df, std_coeff, label_col=None):
+    '''
+    This function will take a dataframe and replaces all the outliers
+    with np.nan.
+    If target(label) column name is given, then it wont consider that
+    column to check and remove outliers.
+
+    The outliers are determined based on the std_coeff given as a parameter.
+
+    Returns: pandas.DataFrame object without outlier values
+    Args:
+        df: pandas.DataFrame object
+        std_coeff: the coefficient of standard deviation
+            Eg: 1.5(recommended) or 3
+        label_col: the target(label) column name (if any) as a string
+
+    '''
     cols = list(df.columns)
 
     # consider only feat cols while removing outliers
@@ -134,6 +205,19 @@ def remove_outliers(df, std_coeff, label_col=None):
 
 
 def fill_nan(df, how):
+    '''
+    This function will take a pandas.DataFrame and fills all the 
+    null values in all columns according to the method provided.
+
+    If target(label) column name is given, then it wont consider that
+    column to fill null values.
+
+    Returns: pandas.DataFrame object without any null values
+
+    Args:
+        df: pandas.DataFrame
+        how: 'median'(recommended) or 'mean'
+    '''
     for col_name in df.columns:
         if df[col_name].dtype in [int, float]:
             if how == "median":
@@ -179,21 +263,28 @@ def suggest_convertion_dict(df):
     # use the _can_convert_to_float() function
     # if the column has nan then definitely int dtype
     '''
-    this function focuses mainly on the string columns and
-    checks if they can be converted into float
-    Eg: a column may have numeric values but in string format
-        like, '12.0', '15.7', ....
+    This function checks if any string columns can be converted into float
+    Eg:
+        - a column may have numeric values but in string format 
+            like, '12.0', '15.7'.
+        - a column may have special symbols or characters instead 
+            of np.nan, like, '?', 'null', 'na' along with normal 
+            numbers like 12, 14.26, 85.15, ...
+        - because of a single string value, the whole column might 
+            have the 'Object' or 'category' datatype
 
-        or, a column may have special symbols or characters instead
-        of np.nan, like, '?', 'null', 'na' along with normal numbers 
-        like 12, 14.26, 85.15, .....
+    This function also checks if any numeric (int or float) columns can be converted into categorical columns with the dtype 'category'.
+    Eg:
+        - a column namely has_credit_card may have binary values 1 or 0.
+        - This column can be considered as categorical because the 
+            ratio of the number of unique values in the column to 
+            the total number of values in the column is very small 
+            (smaller than a threshold of 0.01)
 
-        because of a single string value, the whole column might have
-        the 'object' or 'category' datatype
+    returns: dictionary that can be passed as an argument to the change_dtypes() function
 
-    returns:
-        conversion dictionary that can be passed as an augument
-        to the preprocess() function
+    Args:
+        df: pandas.DataFrame
     '''
 
     suggested_convertion_dict = {}
