@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- added logging functionality to appropriate cleaner functions so that all the changes made to the dataframe by the corresponding functions will be logged inside a csv file in the specified LOG_DIR path
+
 ## 1.0.1
 
 ### Changed
