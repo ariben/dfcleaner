@@ -1,8 +1,13 @@
 import pandas as pd
 import numpy as np
 import re
+from dfcleaner.dflogger import change_logger
+
+ENABLE_LOGGING = False
+LOG_DIR = '.'
 
 
+@change_logger(ENABLE_LOGGING, LOG_DIR)
 def preprocess(df, column_dtype_conversion_dictionary={}, std_coeff=1.5, fill_na_method='median', label_col=None):
     '''
     A convinient function that 
@@ -129,6 +134,7 @@ def _filter_characters(dtype, element):
         return dtype(''.join(filtered_characters))
 
 
+@change_logger(ENABLE_LOGGING, LOG_DIR)
 def change_dtypes(df, conversion_dictionary):
     '''
     This function will take a pandas.DataFrame and a 
@@ -173,6 +179,7 @@ def change_dtypes(df, conversion_dictionary):
     return df
 
 
+@change_logger(ENABLE_LOGGING, LOG_DIR)
 def remove_outliers(df, std_coeff=1.5, label_col=None):
     '''
     This function will take a dataframe and replaces all the outliers
@@ -204,6 +211,7 @@ def remove_outliers(df, std_coeff=1.5, label_col=None):
     return df
 
 
+@change_logger(ENABLE_LOGGING, LOG_DIR)
 def fill_nan(df, how, label_col=None):
     '''
     This function will take a pandas.DataFrame and fills all the 
