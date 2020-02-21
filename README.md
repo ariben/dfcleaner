@@ -6,6 +6,8 @@ This package contains helper methods to clean pandas dataframe quickly and there
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+![](assets/rsz_dfcleaner_logo.png)
+
 ## Installation
 
 OS X & Linux:
