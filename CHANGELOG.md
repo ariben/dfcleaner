@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1
+
+### Added
+
+- added logo in readme
+- added an assets folder and stored png logo, svg logo
+
 ## 1.1.0
 
 ### Added
