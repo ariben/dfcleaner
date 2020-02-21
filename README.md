@@ -23,10 +23,21 @@ pip install dfcleaner
 ## Usage example
 
 ```Python
+import pandas as pd
 from dfcleaner import cleaner
 
+cleaner.ENABLE_LOGGING = True
+cleaner.LOG_DIR = './logs'
+
+df = pd.read_csv('some_filename.csv')
+
 df = cleaner.sanitize_column_names(df)
-df = cleaner.preprocess(df, {'col0': float, 'col2': int}, 1.5, 'median')
+conversion_dict = cleaner.suggest_conversion_dict(df)
+df = cleaner.preprocess(df,
+                        column_dtype_conversion_dictionary = conversion_dict,
+                        std_coeff = 1.5,
+                        fill_na_method = 'median',
+                        label_col = None)
 ```
 
 ## Development setup
