@@ -31,7 +31,7 @@ cleaner.LOG_DIR = './logs'
 
 df = pd.read_csv('some_filename.csv')
 
-df = cleaner.sanitize_column_names(df)
+df.columns = cleaner.sanitize(df.columns)
 conversion_dict = cleaner.suggest_conversion_dict(df)
 df = cleaner.preprocess(df,
                         column_dtype_conversion_dictionary = conversion_dict,
